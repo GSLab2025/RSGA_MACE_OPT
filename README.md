@@ -96,6 +96,13 @@ back to eager execution if the backend fails.
 - The production path keeps TF32 and fp32 fast-eval disabled for float64
   long-range physics.
 
+## How to use ?
+
+Always include the pair repulsion. Example entry point in the modified MACE stack:
+
+```bash
+mace_run_train --model="MACERSGA" --pair_repulsion  --distance_transform="Agnesi"  ...
+```
 
 ## Provenance
 
