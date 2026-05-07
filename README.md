@@ -26,6 +26,32 @@ backends should be treated as portable but not performance-validated; users
 should benchmark and numerically validate those platforms before production MD
 or training.
 
+## Performance Gain
+
+"Optimized" here refers to reducing the RS-GA overhead in large periodic
+systems while preserving the strict float64 physics path. The main changes are
+shared per-forward geometry context across RS-GA layers, reciprocal-grid
+caching for repeated cells, chunked large-graph evaluation to control peak
+memory, and a guarded large-system path that removes the dominant batched
+pairwise tensor contraction hotspot.
+
+Observed validation benchmarks against the earlier MACERSGA implementation:
+
+| System and path | Previous implementation | Optimized implementation | Change |
+| --- | ---: | ---: | ---: |
+| 3000-atom silica forward/eval wall time | 1.220139 s | 0.526204 s | 2.32x faster |
+| 3000-atom silica peak GPU memory | 16999 MB | 7619 MB | 2.23x lower |
+| 3000-atom silica `aten::bmm` self device time | 835.313 ms | 23.391 ms | 35.7x lower |
+| 240-atom In2Se3 forward/eval wall time | 0.200606 s | 0.200651 s | essentially unchanged |
+
+The 240-atom case is intentionally flat: the large-graph path is guarded so
+small systems do not pay overhead for an optimization meant for large cells.
+
+Expected gain: speedup is most likely for large enough systems, roughly when
+the RS-GA pairwise/batched-matmul path becomes a major cost and the calculation
+is close to a GPU memory limit; small cells, MACE-dominated workloads, or runs
+with very few reciprocal modes may show little or no speedup.
+
 ## Installation
 
 Create or activate the intended conda environment, then install the package
