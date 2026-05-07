@@ -69,9 +69,7 @@ back to eager execution if the backend fails.
 - ZBL handling is not scale-shifted by the learned energy scale/shift path.
 - The production path keeps TF32 and fp32 fast-eval disabled for float64
   long-range physics.
-- Old unused experimental modules such as `rsa_old.py` and
-  `k_frequencies_triclinic_overoptimized.py` are intentionally not included in
-  this optimized repository.
+
 
 ## Provenance
 
