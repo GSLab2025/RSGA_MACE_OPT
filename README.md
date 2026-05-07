@@ -8,6 +8,24 @@ dynamics runs on CCR.
 The package is stored under `mace/`, following the layout of the published
 [`GSLab2025/MACE_RSGA`](https://github.com/GSLab2025/MACE_RSGA) repository.
 
+## Hardware Scope
+
+The optimized MACERSGA code is implemented through PyTorch tensor operations
+and does not require a custom NVIDIA-only CUDA extension for correctness. The
+main optimizations--shared per-forward RSGA geometry context, reciprocal-grid
+caching, chunked large-graph evaluation, strict dtype controls, and robust
+`torch.compile` fallback behavior--are backend-portable in principle and should
+run on CPU or other PyTorch-supported accelerators when the dependencies are
+available.
+
+The production performance path was designed, tested, and validated on NVIDIA
+CUDA GPUs, specifically A100 and H100-class hardware, in strict float64 mode.
+The documented defaults disable TF32 and optional fp32 fast-eval paths to
+preserve long-range physics. CPU, AMD GPU, Apple silicon, or other non-CUDA
+backends should be treated as portable but not performance-validated; users
+should benchmark and numerically validate those platforms before production MD
+or training.
+
 ## Installation
 
 Create or activate the intended conda environment, then install the package
