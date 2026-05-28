@@ -2,7 +2,7 @@
 
 This repository contains the optimized MACE-integrated Reciprocal Space Gated
 Attention codebase, referred to as MACERSGA. It corresponds to the stable
-float64 production code used for the 2026 In2Se3 4x4x1 and 9x9x1 molecular
+float64 production code used for the 2026 In2Se3 molecular
 dynamics runs on CCR.
 
 The package is stored under `mace/`, following the layout of the published
